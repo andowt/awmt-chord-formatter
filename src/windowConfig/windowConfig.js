@@ -1,6 +1,9 @@
+import configurationsFile from './config.json';
+import defaultConfigurationsFile from './default_configs.json';
+
 document.addEventListener('DOMContentLoaded', () => {
     let configurations = [];
-    if (window.ipcRender) {
+  const configStorageKey = 'chord-formatter-configurations';
   
       function createConfigElement(config, index) {
         const configElement = document.createElement('div');
@@ -36,33 +39,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
       async function saveConfigurationsToFile() {
         console.log("Saving configs to file");
-        try {
-            await window.ipcRender.invoke('save-config', configurations);
-          } catch {
-            console.log("Failed to save configs");
-          }
+        localStorage.setItem(configStorageKey, JSON.stringify(configurations));
       }
 
       async function loadConfigurationsFromFile() {
         console.log("Loading configs from file");
-        try {
-            configurations = await window.ipcRender.invoke('load-config', 'config.json');
-          } catch {
-            console.log("Failed to load configs");
-          }
-          loadConfigurationsToHTML(configurations);
+        const savedConfigurations = localStorage.getItem(configStorageKey);
+        configurations = savedConfigurations ? JSON.parse(savedConfigurations) : configurationsFile;
+          loadConfigurationsToHTML();
       }
 
       async function loadDefaultsFromFile() {
         console.log("Loading defaults from file");
-        try {
-            configurations = await window.ipcRender.invoke('load-config', 'default_configs.json');
-          } catch {
-            console.log("Failed to load configs");
-          }
-          loadConfigurationsToHTML(configurations);
+        configurations = defaultConfigurationsFile;
+          loadConfigurationsToHTML();
       }
-  
+
       function loadConfigurationsToHTML() {
         console.log("loading configs to html");
         const configContainer = document.getElementById('configurations');
@@ -75,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Attach delete event listeners after elements are added to the DOM
         document.querySelectorAll('.delete-config').forEach(button => {
           button.addEventListener('click', () => {
-            const index = button.getAttribute('data-index');
+            const index = button.dataset.index;
             deleteConfig(index);
           });
         });
@@ -116,7 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
   
       document.getElementById('save-configurations').addEventListener('click', async () => {
         saveConfigurationsFromHTML();
-        saveConfigurationsToFile();
+        await saveConfigurationsToFile();
         window.close(); // Close the configuration window after saving
       });
 
@@ -130,9 +122,5 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       loadConfigurationsFromFile();
-  
-    } else {
-      console.error('Electron IPC Renderer not available yet.');
-    }
   });
   
