@@ -1,6 +1,17 @@
 import configurationsFile from '../data/config.json';
 import defaultConfigurationsFile from '../data/default-configs.json';
 
+function isValidConfigurationList(value) {
+  return Array.isArray(value) && value.every(config => (
+    config?.fontSize !== undefined &&
+    typeof config.fontWeight === 'string' &&
+    config?.transpose !== undefined &&
+    typeof config.name === 'string' &&
+    typeof config.a3 === 'boolean' &&
+    typeof config.enable === 'boolean'
+  ));
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     let configurations = [];
   const configStorageKey = 'chord-formatter-configurations';
@@ -89,6 +100,39 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log("Configurations: ");
         console.log(configurations);
       }
+
+      function setConfigStatus(message) {
+        document.getElementById('config-status').textContent = message;
+      }
+
+      function exportConfigurations() {
+        saveConfigurationsFromHTML();
+        const file = new Blob([JSON.stringify(configurations, null, 2)], {
+          type: 'application/json',
+        });
+        const downloadLink = document.createElement('a');
+        downloadLink.href = URL.createObjectURL(file);
+        downloadLink.download = 'chord-formatter-configurations.json';
+        downloadLink.click();
+        URL.revokeObjectURL(downloadLink.href);
+        setConfigStatus('Configurations exported.');
+      }
+
+      function importConfigurations(file) {
+        file.text()
+          .then(fileContents => JSON.parse(fileContents))
+          .then(importedConfigurations => {
+            if (!isValidConfigurationList(importedConfigurations)) {
+              throw new Error('The file does not contain valid configurations.');
+            }
+            configurations = importedConfigurations;
+            loadConfigurationsToHTML();
+            setConfigStatus('Configurations imported. Save to keep them.');
+          })
+          .catch(error => {
+            setConfigStatus(`Import failed: ${error.message}`);
+          });
+      }
   
       document.getElementById('add-config').addEventListener('click', () => {
         console.log("ADD Clicked");
@@ -114,6 +158,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
       document.getElementById('default-configurations').addEventListener('click', async () => {
         loadDefaultsFromFile();
+      });
+
+      document.getElementById('export-configurations').addEventListener('click', exportConfigurations);
+
+      const configFileInput = document.getElementById('config-file-input');
+      document.getElementById('import-configurations').addEventListener('click', () => {
+        configFileInput.click();
+      });
+      configFileInput.addEventListener('change', event => {
+        const [file] = event.target.files;
+        if (file) importConfigurations(file);
+        event.target.value = '';
       });
   
       function deleteConfig(index) {

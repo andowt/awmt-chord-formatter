@@ -36,9 +36,14 @@
         <button type="submit" aria-label="Close configurations">Close</button>
       </div>
       <div id="configurations"></div>
+      <output id="config-status" aria-live="polite"></output>
       <div class="config-modal-actions">
         <button id="add-config" type="button">Add Configuration</button>
         <button id="default-configurations" type="button">Set Defaults</button>
+        <button id="export-configurations" type="button">Export JSON</button>
+        <button id="import-configurations" type="button">Import JSON</button>
+        <label class="visually-hidden" for="config-file-input">Configuration JSON file</label>
+        <input id="config-file-input" type="file" accept="application/json,.json" hidden>
         <button id="save-configurations" type="button">Save Configurations</button>
       </div>
     </form>

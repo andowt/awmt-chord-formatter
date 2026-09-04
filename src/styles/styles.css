@@ -79,6 +79,24 @@ body {
   margin-top: 16px;
 }
 
+#config-status {
+  min-height: 1.2em;
+  margin: 12px 0 0;
+  color: #555;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 .config-item {
   display: grid;
   grid-template-columns: 110px minmax(0, 1fr) 70px minmax(0, 1fr);
