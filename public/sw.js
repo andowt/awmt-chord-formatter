@@ -1,4 +1,4 @@
-const cacheName = 'chord-formatter-v1';
+const cacheName = 'chord-formatter-v2';
 
 self.addEventListener('install', event => {
   event.waitUntil(
