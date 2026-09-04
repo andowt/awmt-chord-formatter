@@ -92,6 +92,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   document.getElementById('configBtn').addEventListener('click', () => {
-    window.open(`${import.meta.env.BASE_URL}config.html`, '_blank', 'popup,width=800,height=600');
+    document.getElementById('configModal').showModal();
   });
 });
