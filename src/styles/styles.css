@@ -113,7 +113,7 @@ input, select { min-height: 32px; padding: 5px 8px; border: 1px solid var(--line
 }
 #editor:empty::before { content: "Paste or type your chord sheet here..."; color: #a2adb4; pointer-events: none; }
 
-.status-bar { display: block; flex: 0 0 auto; min-height: 30px; padding: 7px 24px; color: var(--muted); background: #e4eaed; border-top: 1px solid #cfd9de; font-size: 12px; }
+.status-bar { display: block; flex: 0 0 auto; min-height: 30px; padding: 7px 24px; color: #8ee6a8; background: #20313d; border-top: 1px solid #314954; font-size: 12px; }
 .highlighted-chord { padding: .2em .5em; border-radius: 3px; color: #163d4a; background: #f0c27b; font-weight: bold; }
 
 #configModal { width: min(720px, calc(100vw - 32px)); max-height: calc(100vh - 32px); padding: 0; border: 1px solid var(--line); border-radius: 10px; box-shadow: 0 20px 60px rgb(23 33 43 / 22%); }
