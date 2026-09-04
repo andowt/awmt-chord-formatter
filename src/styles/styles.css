@@ -54,7 +54,8 @@ button:focus-visible, input:focus-visible, select:focus-visible, #editor:focus-v
   border-bottom: 4px solid #d08b42;
 }
 
-.app-title { display: flex; align-items: center; gap: 12px; max-width: 1440px; margin: auto; }
+.app-header-inner { display: flex; align-items: center; justify-content: space-between; gap: 24px; max-width: 1440px; margin: auto; }
+.app-title { display: flex; align-items: center; gap: 12px; }
 .app-logo {
   display: block;
   width: 36px;
@@ -66,6 +67,10 @@ button:focus-visible, input:focus-visible, select:focus-visible, #editor:focus-v
 .app-title h1, .app-title p { margin: 0; }
 .app-title h1 { font-size: 22px; font-weight: 750; }
 .app-title p { margin-top: 3px; color: #b9c9d1; font-size: 14px; font-weight: 600; }
+.partner-link { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; color: #d8e7ec; text-decoration: none; }
+.partner-link span { color: #a9c0c9; font-size: 11px; font-weight: 600; }
+.partner-link img { display: block; width: min(250px, 32vw); height: auto; aspect-ratio: 1000 / 360; object-fit: contain; border-radius: 4px; }
+.partner-link:hover img { filter: brightness(1.08); }
 
 .app-main { min-height: 0; flex: 1; display: flex; flex-direction: column; width: min(1440px, 100%); margin: auto; }
 .toolbar {
@@ -132,6 +137,7 @@ input, select { min-height: 32px; padding: 5px 8px; border: 1px solid var(--line
 
 @media (max-width: 800px) {
   .app-header, .toolbar { padding-left: 16px; padding-right: 16px; }
+  .app-header-inner { align-items: flex-start; }
   .button-quiet, .document-actions { margin-left: 0; margin-right: 0; }
   .editor-wrap { margin: 12px 16px; }
 }
