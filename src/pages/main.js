@@ -10,14 +10,10 @@ import {
 import { downloadDocx, generateDocx } from '../features/docx/docxGen.js';
 import defaultConfigurations from '../data/default-configs.json';
 import exampleText from '../data/example.txt?raw';
+import { readStoredConfigurations } from '../features/config/configuration.js';
 
-const configStorageKey = 'chord-formatter-configurations';
-
-async function loadConfigurations() {
-  const savedConfigurations = localStorage.getItem(configStorageKey);
-  if (savedConfigurations) return JSON.parse(savedConfigurations);
-
-  return defaultConfigurations;
+function loadConfigurations() {
+  return readStoredConfigurations(defaultConfigurations);
 }
 
 function showStatus(message) {
@@ -60,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.getElementById('generateButton').addEventListener('click', async () => {
     try {
-      const configurations = await loadConfigurations();
+      const configurations = loadConfigurations();
       const fileName = document.getElementById('filename').value;
       if (!fileName.trim()) {
         showStatus('Enter a song name first.');

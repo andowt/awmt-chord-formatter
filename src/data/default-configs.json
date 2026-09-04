@@ -4,7 +4,7 @@
     "fontWeight": "normal",
     "transpose": "0",
     "name": "Standard",
-    "A3": false,
+    "a3": false,
     "enable": true
   },
   {
@@ -12,7 +12,7 @@
     "fontWeight": "normal",
     "transpose": "0",
     "name": "Standard Capo",
-    "A3": false,
+    "a3": false,
     "enable": false
   },
   {
@@ -20,7 +20,7 @@
     "fontWeight": "bold",
     "transpose": "0",
     "name": "Large",
-    "A3": true,
+    "a3": true,
     "enable": true
   },
   {
@@ -28,7 +28,7 @@
     "fontWeight": "bold",
     "transpose": "0",
     "name": "Large Capo",
-    "A3": true,
+    "a3": true,
     "enable": false
   },
   {
@@ -36,7 +36,7 @@
     "fontWeight": "normal",
     "transpose": "2",
     "name": "Bb",
-    "A3": false,
+    "a3": false,
     "enable": true
   },
   {
@@ -44,7 +44,7 @@
     "fontWeight": "normal",
     "transpose": "-3",
     "name": "Eb",
-    "A3": false,
+    "a3": false,
     "enable": true
   }
 ]
