@@ -23,6 +23,31 @@ function showStatus(message) {
 document.addEventListener('DOMContentLoaded', () => {
   const editor = document.getElementById('editor');
 
+  editor.addEventListener('paste', event => {
+    event.preventDefault();
+    const plainText = event.clipboardData?.getData('text/plain') ?? '';
+    const selection = window.getSelection();
+
+    if (!selection || selection.rangeCount === 0) {
+      editor.append(document.createTextNode(plainText));
+      return;
+    }
+
+    const range = selection.getRangeAt(0);
+    if (!editor.contains(range.commonAncestorContainer)) {
+      editor.append(document.createTextNode(plainText));
+      return;
+    }
+
+    range.deleteContents();
+    const textNode = document.createTextNode(plainText);
+    range.insertNode(textNode);
+    range.setStartAfter(textNode);
+    range.collapse(true);
+    selection.removeAllRanges();
+    selection.addRange(range);
+  });
+
   document.getElementById('loadExampleBtn').addEventListener('click', async () => {
     try {
       editor.innerText = exampleText;
