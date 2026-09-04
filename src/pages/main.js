@@ -7,7 +7,7 @@ import {
   removeBlankLinesInContent,
   autoBreakContent
 } from '../features/chordProcessing/chordContentProcessor.js';
-import { downloadDocx, generateDocx } from '../features/docx/docxGen.js';
+import { downloadDocxZip, generateDocx } from '../features/docx/docxGen.js';
 import defaultConfigurations from '../data/default-configs.json';
 import exampleText from '../data/example.txt?raw';
 import { readStoredConfigurations } from '../features/config/configuration.js';
@@ -91,6 +91,8 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
+      showStatus('Generating DOCX files...');
+      const documents = [];
       for (const config of configurations) {
         if (!config.enable) continue;
         let outputContent = transposeInContent(editor.innerText, Number.parseInt(config.transpose));
@@ -106,8 +108,16 @@ document.addEventListener('DOMContentLoaded', () => {
           content: outputContent,
           fileName,
         });
-        downloadDocx(blob, fileName, config.name);
+        documents.push({ blob, configName: config.name });
       }
+
+      if (documents.length === 0) {
+        showStatus('Enable at least one configuration first.');
+        return;
+      }
+
+      showStatus('Creating ZIP download...');
+      await downloadDocxZip(documents, fileName);
       showStatus('DOCX generation completed successfully.');
     } catch (error) {
       showStatus('DOCX generation failed.');
