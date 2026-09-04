@@ -1,182 +1,213 @@
 import configurationsFile from '../data/config.json';
 import defaultConfigurationsFile from '../data/default-configs.json';
-
-function isValidConfigurationList(value) {
-  return Array.isArray(value) && value.every(config => (
-    config?.fontSize !== undefined &&
-    typeof config.fontWeight === 'string' &&
-    config?.transpose !== undefined &&
-    typeof config.name === 'string' &&
-    typeof config.a3 === 'boolean' &&
-    typeof config.enable === 'boolean'
-  ));
-}
+import {
+  normalizeConfiguration,
+  normalizeConfigurationList,
+  readStoredConfigurations,
+  saveStoredConfigurations,
+} from '../features/config/configuration.js';
 
 document.addEventListener('DOMContentLoaded', () => {
-    let configurations = [];
-  const configStorageKey = 'chord-formatter-configurations';
-  
-      function createConfigElement(config, index) {
-        const configElement = document.createElement('div');
-        configElement.classList.add('config-item');
-  
-        configElement.innerHTML = `
-            <label for="font-size-${index}">Font Size:</label>
-            <input type="number" id="font-size-${index}" name="fontSize" value="${config.fontSize}" required><br>
-  
-            <label for="font-weight-${index}">Font Weight:</label>
-            <select id="font-weight-${index}" name="fontWeight" required>
-                <option value="normal" ${config.fontWeight === 'normal' ? 'selected' : ''}>Normal</option>
-                <option value="bold" ${config.fontWeight === 'bold' ? 'selected' : ''}>Bold</option>
-            </select><br>
-  
-            <label for="transpose-${index}">Transpose:</label>
-            <input type="number" id="transpose-${index}" name="transpose" value="${config.transpose}" required><br>
-  
-            <label for="name-${index}">Name:</label>
-            <input type="text" id="name-${index}" name="name" value="${config.name}" required><br>
+  let configurations = readStoredConfigurations(configurationsFile);
+  let savedConfigurations = JSON.stringify(configurations);
+  const configModal = document.getElementById('configModal');
+  const configContainer = document.getElementById('configurations');
+  const configStatus = document.getElementById('config-status');
 
-            <label for="A3-${index}">A3:</label>
-            <input type="checkbox" id="A3-${index}" name="A3" ${config.a3 ? 'checked' : ''} required><br>
+  function setConfigStatus(message) {
+    configStatus.textContent = message;
+  }
 
-            <label for="enable-${index}">Enable:</label>
-            <input type="checkbox" id="enable-${index}" name="enable" ${config.enable ? 'checked' : ''} required><br>
-  
-            <button class="delete-config" data-index="${index}">Delete</button>
-        `;
-  
-        return configElement;
-      }
+  function updateDirtyStatus() {
+    const isDirty = JSON.stringify(configurations) !== savedConfigurations;
+    setConfigStatus(isDirty ? 'Unsaved changes.' : '');
+  }
 
-      async function saveConfigurationsToFile() {
-        console.log("Saving configs to file");
-        localStorage.setItem(configStorageKey, JSON.stringify(configurations));
-      }
+  function createField(labelText, input) {
+    const label = document.createElement('label');
+    label.textContent = labelText;
+    label.htmlFor = input.id;
+    return [label, input];
+  }
 
-      async function loadConfigurationsFromFile() {
-        console.log("Loading configs from file");
-        const savedConfigurations = localStorage.getItem(configStorageKey);
-        configurations = savedConfigurations ? JSON.parse(savedConfigurations) : configurationsFile;
-          loadConfigurationsToHTML();
-      }
+  function createConfigElement(configuration, index) {
+    const configElement = document.createElement('div');
+    configElement.className = 'config-item';
 
-      async function loadDefaultsFromFile() {
-        console.log("Loading defaults from file");
-        configurations = defaultConfigurationsFile;
-          loadConfigurationsToHTML();
-      }
+    const fontSize = document.createElement('input');
+    fontSize.type = 'number';
+    fontSize.id = `font-size-${index}`;
+    fontSize.value = configuration.fontSize;
+    fontSize.min = '1';
+    fontSize.max = '72';
+    fontSize.required = true;
 
-      function loadConfigurationsToHTML() {
-        console.log("loading configs to html");
-        const configContainer = document.getElementById('configurations');
-        configContainer.innerHTML = '';
-        configurations.forEach((config, index) => {
-          const configElement = createConfigElement(config, index);
-          configContainer.appendChild(configElement);
-        });
-  
-        // Attach delete event listeners after elements are added to the DOM
-        document.querySelectorAll('.delete-config').forEach(button => {
-          button.addEventListener('click', () => {
-            const index = button.dataset.index;
-            deleteConfig(index);
-          });
-        });
-      }
+    const fontWeight = document.createElement('select');
+    fontWeight.id = `font-weight-${index}`;
+    fontWeight.required = true;
+    ['normal', 'bold'].forEach(weight => {
+      const option = document.createElement('option');
+      option.value = weight;
+      option.textContent = weight[0].toUpperCase() + weight.slice(1);
+      option.selected = configuration.fontWeight === weight;
+      fontWeight.appendChild(option);
+    });
 
-      function saveConfigurationsFromHTML()
-      {
-        console.log("saving configs from html");
-        configurations = configurations.map((config, index) => {
-            return {
-              fontSize: document.getElementById(`font-size-${index}`).value,
-              fontWeight: document.getElementById(`font-weight-${index}`).value,
-              transpose: document.getElementById(`transpose-${index}`).value,
-              name: document.getElementById(`name-${index}`).value,
-              a3: document.getElementById(`A3-${index}`).checked,
-              enable: document.getElementById(`enable-${index}`).checked,
-            };
-        });
-        console.log("Configurations: ");
-        console.log(configurations);
-      }
+    const transpose = document.createElement('input');
+    transpose.type = 'number';
+    transpose.id = `transpose-${index}`;
+    transpose.value = configuration.transpose;
+    transpose.min = '-24';
+    transpose.max = '24';
+    transpose.required = true;
 
-      function setConfigStatus(message) {
-        document.getElementById('config-status').textContent = message;
-      }
+    const name = document.createElement('input');
+    name.type = 'text';
+    name.id = `name-${index}`;
+    name.value = configuration.name;
+    name.required = true;
 
-      function exportConfigurations() {
-        saveConfigurationsFromHTML();
-        const file = new Blob([JSON.stringify(configurations, null, 2)], {
-          type: 'application/json',
-        });
-        const downloadLink = document.createElement('a');
-        downloadLink.href = URL.createObjectURL(file);
-        downloadLink.download = 'chord-formatter-configurations.json';
-        downloadLink.click();
-        URL.revokeObjectURL(downloadLink.href);
-        setConfigStatus('Configurations exported.');
-      }
+    const a3 = document.createElement('input');
+    a3.type = 'checkbox';
+    a3.id = `a3-${index}`;
+    a3.checked = configuration.a3;
 
-      function importConfigurations(file) {
-        file.text()
-          .then(fileContents => JSON.parse(fileContents))
-          .then(importedConfigurations => {
-            if (!isValidConfigurationList(importedConfigurations)) {
-              throw new Error('The file does not contain valid configurations.');
-            }
-            configurations = importedConfigurations;
-            loadConfigurationsToHTML();
-            setConfigStatus('Configurations imported. Save to keep them.');
-          })
-          .catch(error => {
-            setConfigStatus(`Import failed: ${error.message}`);
-          });
-      }
-  
-      document.getElementById('add-config').addEventListener('click', () => {
-        console.log("ADD Clicked");
-        saveConfigurationsFromHTML();
-        const newConfig = {
-          fontSize: '12',
-          fontWeight: 'normal',
-          transpose: '0',
-          name: '',
-          a3: true,
-          enable: true,
-        };
-  
-        configurations.push(newConfig);
-        loadConfigurationsToHTML();
-      });
-  
-      document.getElementById('save-configurations').addEventListener('click', async () => {
-        saveConfigurationsFromHTML();
-        await saveConfigurationsToFile();
-        document.getElementById('configModal').close();
-      });
+    const enable = document.createElement('input');
+    enable.type = 'checkbox';
+    enable.id = `enable-${index}`;
+    enable.checked = configuration.enable;
 
-      document.getElementById('default-configurations').addEventListener('click', async () => {
-        loadDefaultsFromFile();
-      });
+    [
+      ...createField('Font Size:', fontSize),
+      ...createField('Font Weight:', fontWeight),
+      ...createField('Transpose:', transpose),
+      ...createField('Name:', name),
+      ...createField('A3:', a3),
+      ...createField('Enable:', enable),
+    ].forEach(element => configElement.appendChild(element));
 
-      document.getElementById('export-configurations').addEventListener('click', exportConfigurations);
+    const deleteButton = document.createElement('button');
+    deleteButton.type = 'button';
+    deleteButton.textContent = 'Delete';
+    deleteButton.addEventListener('click', () => {
+      configurations.splice(index, 1);
+      renderConfigurations();
+      updateDirtyStatus();
+    });
+    configElement.appendChild(deleteButton);
+    return configElement;
+  }
 
-      const configFileInput = document.getElementById('config-file-input');
-      document.getElementById('import-configurations').addEventListener('click', () => {
-        configFileInput.click();
-      });
-      configFileInput.addEventListener('change', event => {
-        const [file] = event.target.files;
-        if (file) importConfigurations(file);
-        event.target.value = '';
-      });
-  
-      function deleteConfig(index) {
-        configurations.splice(index, 1);
-        loadConfigurationsToHTML();
-      }
+  function renderConfigurations() {
+    configContainer.replaceChildren(
+      ...configurations.map((configuration, index) => createConfigElement(configuration, index)),
+    );
+  }
 
-      loadConfigurationsFromFile();
+  function readConfigurationsFromForm() {
+    return configurations.map((configuration, index) => normalizeConfiguration({
+      fontSize: document.getElementById(`font-size-${index}`).value,
+      fontWeight: document.getElementById(`font-weight-${index}`).value,
+      transpose: document.getElementById(`transpose-${index}`).value,
+      name: document.getElementById(`name-${index}`).value,
+      a3: document.getElementById(`a3-${index}`).checked,
+      enable: document.getElementById(`enable-${index}`).checked,
+    }));
+  }
+
+  function captureFormChanges() {
+    try {
+      configurations = normalizeConfigurationList(readConfigurationsFromForm());
+      updateDirtyStatus();
+      return true;
+    } catch (error) {
+      setConfigStatus(error.message);
+      return false;
+    }
+  }
+
+  function saveConfigurations() {
+    if (!captureFormChanges()) return;
+    try {
+      saveStoredConfigurations(configurations);
+      savedConfigurations = JSON.stringify(configurations);
+      setConfigStatus('Configurations saved.');
+    } catch (error) {
+      setConfigStatus(error.message);
+    }
+  }
+
+  function exportConfigurations() {
+    if (!captureFormChanges()) return;
+    const file = new Blob([JSON.stringify({ version: 1, configurations }, null, 2)], {
+      type: 'application/json',
+    });
+    const downloadLink = document.createElement('a');
+    const objectUrl = URL.createObjectURL(file);
+    downloadLink.href = objectUrl;
+    downloadLink.download = 'chord-formatter-configurations.json';
+    downloadLink.click();
+    URL.revokeObjectURL(objectUrl);
+    setConfigStatus('Configurations exported.');
+  }
+
+  function importConfigurations(file) {
+    file.text()
+      .then(fileContents => normalizeConfigurationList(JSON.parse(fileContents)))
+      .then(importedConfigurations => {
+        configurations = importedConfigurations;
+        renderConfigurations();
+        setConfigStatus('Configurations imported. Save to keep them.');
+      })
+      .catch(error => setConfigStatus(`Import failed: ${error.message}`));
+  }
+
+  document.getElementById('add-config').addEventListener('click', () => {
+    captureFormChanges();
+    configurations.push(normalizeConfiguration({
+      fontSize: 12,
+      fontWeight: 'normal',
+      transpose: 0,
+      name: 'New Configuration',
+      a3: true,
+      enable: true,
+    }));
+    renderConfigurations();
+    updateDirtyStatus();
   });
-  
+
+  document.getElementById('save-configurations').addEventListener('click', () => {
+    saveConfigurations();
+    if (JSON.stringify(configurations) === savedConfigurations) configModal.close();
+  });
+
+  document.getElementById('default-configurations').addEventListener('click', () => {
+    if (JSON.stringify(configurations) !== savedConfigurations && !window.confirm('Replace current changes with the default configurations?')) {
+      return;
+    }
+    configurations = normalizeConfigurationList(defaultConfigurationsFile);
+    renderConfigurations();
+    updateDirtyStatus();
+  });
+
+  document.getElementById('export-configurations').addEventListener('click', exportConfigurations);
+
+  const configFileInput = document.getElementById('config-file-input');
+  document.getElementById('import-configurations').addEventListener('click', () => configFileInput.click());
+  configFileInput.addEventListener('change', event => {
+    const [file] = event.target.files;
+    if (file) importConfigurations(file);
+    event.target.value = '';
+  });
+
+  configContainer.addEventListener('input', captureFormChanges);
+  configModal.addEventListener('close', () => {
+    if (JSON.stringify(configurations) !== savedConfigurations) {
+      configurations = JSON.parse(savedConfigurations);
+      renderConfigurations();
+      setConfigStatus('');
+    }
+  });
+
+  renderConfigurations();
+});
