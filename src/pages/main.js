@@ -30,6 +30,31 @@ function showStatus(message) {
 
 document.addEventListener('DOMContentLoaded', () => {
   const editor = document.getElementById('editor');
+  const installButton = document.getElementById('installButton');
+  let deferredInstallPrompt;
+
+  window.addEventListener('beforeinstallprompt', event => {
+    event.preventDefault();
+    deferredInstallPrompt = event;
+    installButton.hidden = false;
+  });
+
+  installButton.addEventListener('click', async () => {
+    if (!deferredInstallPrompt) return;
+
+    deferredInstallPrompt.prompt();
+    const { outcome } = await deferredInstallPrompt.userChoice;
+    deferredInstallPrompt = undefined;
+    installButton.hidden = true;
+    if (outcome === 'accepted') showStatus('App installation started.');
+  });
+
+  window.addEventListener('appinstalled', () => {
+    deferredInstallPrompt = undefined;
+    installButton.hidden = true;
+    showStatus('App installed successfully.');
+  });
+
   const undoButton = document.getElementById('undoBtn');
   const undoHistory = [];
   let lastEditorContent = editor.innerText;
