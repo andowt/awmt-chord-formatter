@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" preserveAspectRatio="xMidYMid meet" role="img" aria-labelledby="title desc">
+  <title id="title">Music note</title>
+  <desc id="desc">A blue music note on a dark circular background</desc>
+  <circle cx="256" cy="256" r="244" fill="#20313d" stroke="#d08b42" stroke-width="16"/>
+  <g fill="#8ee6a8" transform="translate(-48 0)">
+    <path d="M287 102h28v226c0 34-28 61-63 61s-63-27-63-61 28-61 63-61c13 0 25 3 35 10V102Z"/>
+    <path d="M315 102c64 8 91 31 104 65-28-13-62-16-104-4V102Z"/>
+  </g>
+</svg>
