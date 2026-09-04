@@ -25,7 +25,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   editor.addEventListener('paste', event => {
     event.preventDefault();
-    const plainText = event.clipboardData?.getData('text/plain') ?? '';
+    const tabSpacesInput = document.getElementById('tabSpaces');
+    const tabSpaces = Math.max(0, Number.parseInt(tabSpacesInput.value, 10) || 0);
+    const plainText = (event.clipboardData?.getData('text/plain') ?? '')
+      .replaceAll('\t', ' '.repeat(tabSpaces));
     const selection = window.getSelection();
 
     if (!selection || selection.rangeCount === 0) {
