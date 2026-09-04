@@ -109,7 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('save-configurations').addEventListener('click', async () => {
         saveConfigurationsFromHTML();
         await saveConfigurationsToFile();
-        window.close(); // Close the configuration window after saving
+        document.getElementById('configModal').close();
       });
 
       document.getElementById('default-configurations').addEventListener('click', async () => {

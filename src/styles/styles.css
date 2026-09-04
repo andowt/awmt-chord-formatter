@@ -40,3 +40,73 @@ body {
   border-radius: 3px; /* Rounded corners */
   font-weight: bold; /* Bold text */
 }
+
+#configModal {
+  width: min(720px, calc(100vw - 32px));
+  max-height: calc(100vh - 32px);
+  padding: 0;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+#configModal::backdrop {
+  background: rgb(0 0 0 / 45%);
+}
+
+.config-modal-content {
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.config-modal-header,
+.config-modal-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.config-modal-header {
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.config-modal-header h2 {
+  margin: 0;
+}
+
+.config-modal-actions {
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+
+.config-item {
+  display: grid;
+  grid-template-columns: 110px minmax(0, 1fr) 70px minmax(0, 1fr);
+  gap: 8px;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.config-item br {
+  display: none;
+}
+
+.config-item button {
+  grid-column: 4;
+  justify-self: end;
+}
+
+@media (max-width: 600px) {
+  .config-item {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .config-item button {
+    grid-column: 2;
+  }
+
+  .config-modal-actions {
+    flex-wrap: wrap;
+  }
+}

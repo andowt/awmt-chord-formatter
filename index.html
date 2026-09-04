@@ -29,6 +29,21 @@
   </div>
   <p id="status"></p>
   <div id="editor" contenteditable="true" aria-label="Chord sheet editor"></div>
+  <dialog id="configModal" aria-labelledby="configModalTitle">
+    <form method="dialog" class="config-modal-content">
+      <div class="config-modal-header">
+        <h2 id="configModalTitle">Configurations</h2>
+        <button type="submit" aria-label="Close configurations">Close</button>
+      </div>
+      <div id="configurations"></div>
+      <div class="config-modal-actions">
+        <button id="add-config" type="button">Add Configuration</button>
+        <button id="default-configurations" type="button">Set Defaults</button>
+        <button id="save-configurations" type="button">Save Configurations</button>
+      </div>
+    </form>
+  </dialog>
   <script type="module" src="/src/pages/main.js"></script>
+  <script type="module" src="/src/pages/config.js"></script>
 </body>
 </html>
