@@ -23,6 +23,7 @@ body {
 
 #editor {
   flex: 1;
+  min-height: 0;
   padding: 20px;
   font-family: 'Courier New', monospace;
   font-size: 14px;
@@ -31,7 +32,19 @@ body {
   resize: none;
   white-space: pre;
   overflow-y: auto; /* Allow vertical scrolling */
-  height: calc(100vh - 80px); /* Adjust the height to account for the toolbar height */
+  overflow-wrap: break-word;
+}
+
+.status-bar {
+  display: block;
+  flex: 0 0 auto;
+  min-height: 24px;
+  box-sizing: border-box;
+  padding: 4px 12px;
+  background: #f0f0f0;
+  border-top: 1px solid #ccc;
+  color: #444;
+  font-size: 13px;
 }
 
 .highlighted-chord {
