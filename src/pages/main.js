@@ -22,9 +22,57 @@ function showStatus(message) {
 
 document.addEventListener('DOMContentLoaded', () => {
   const editor = document.getElementById('editor');
+  const undoButton = document.getElementById('undoBtn');
+  const undoHistory = [];
+  let lastEditorContent = editor.innerText;
+
+  function updateUndoButton() {
+    undoButton.disabled = undoHistory.length === 0;
+  }
+
+  function saveUndoPoint() {
+    if (undoHistory.at(-1) !== editor.innerText) {
+      undoHistory.push(editor.innerText);
+    }
+    updateUndoButton();
+  }
+
+  function setEditorContent(content) {
+    saveUndoPoint();
+    editor.innerText = content;
+    lastEditorContent = content;
+  }
+
+  function undoLastAction() {
+    const previousContent = undoHistory.pop();
+    if (previousContent === undefined) return;
+
+    editor.innerText = previousContent;
+    lastEditorContent = previousContent;
+    updateUndoButton();
+    showStatus('Last editor action undone.');
+  }
+
+  editor.addEventListener('input', () => {
+    if (editor.innerText !== lastEditorContent) {
+      undoHistory.push(lastEditorContent);
+      lastEditorContent = editor.innerText;
+      updateUndoButton();
+    }
+  });
+
+  editor.addEventListener('keydown', event => {
+    if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'z' && !event.shiftKey) {
+      event.preventDefault();
+      undoLastAction();
+    }
+  });
+
+  undoButton.addEventListener('click', undoLastAction);
 
   editor.addEventListener('paste', event => {
     event.preventDefault();
+    saveUndoPoint();
     const tabSpacesInput = document.getElementById('tabSpaces');
     const tabSpaces = Math.max(0, Number.parseInt(tabSpacesInput.value, 10) || 0);
     const plainText = (event.clipboardData?.getData('text/plain') ?? '')
@@ -33,12 +81,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!selection || selection.rangeCount === 0) {
       editor.append(document.createTextNode(plainText));
+      lastEditorContent = editor.innerText;
       return;
     }
 
     const range = selection.getRangeAt(0);
     if (!editor.contains(range.commonAncestorContainer)) {
       editor.append(document.createTextNode(plainText));
+      lastEditorContent = editor.innerText;
       return;
     }
 
@@ -49,11 +99,12 @@ document.addEventListener('DOMContentLoaded', () => {
     range.collapse(true);
     selection.removeAllRanges();
     selection.addRange(range);
+    lastEditorContent = editor.innerText;
   });
 
   document.getElementById('loadExampleBtn').addEventListener('click', async () => {
     try {
-      editor.innerText = exampleText;
+      setEditorContent(exampleText);
     } catch (error) {
       showStatus('Failed to load example text.');
       console.error(error);
@@ -61,25 +112,25 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   document.getElementById('markBtn').addEventListener('click', () => {
-    editor.innerText = markChordsInContent(editor.innerText);
+    setEditorContent(markChordsInContent(editor.innerText));
   });
   document.getElementById('unMarkBtn').addEventListener('click', () => {
-    editor.innerText = unMarkChordsInContent(editor.innerText);
+    setEditorContent(unMarkChordsInContent(editor.innerText));
   });
   document.getElementById('nestBtn').addEventListener('click', () => {
-    editor.innerText = nestChordsInContent(editor.innerText);
+    setEditorContent(nestChordsInContent(editor.innerText));
   });
   document.getElementById('unNestBtn').addEventListener('click', () => {
-    editor.innerText = unNestChordsInContent(editor.innerText);
+    setEditorContent(unNestChordsInContent(editor.innerText));
   });
   document.getElementById('rmEmptyBtn').addEventListener('click', () => {
-    editor.innerText = removeBlankLinesInContent(editor.innerText);
+    setEditorContent(removeBlankLinesInContent(editor.innerText));
   });
   document.getElementById('transUpBtn').addEventListener('click', () => {
-    editor.innerText = transposeInContent(editor.innerText, 1);
+    setEditorContent(transposeInContent(editor.innerText, 1));
   });
   document.getElementById('transDownBtn').addEventListener('click', () => {
-    editor.innerText = transposeInContent(editor.innerText, -1);
+    setEditorContent(transposeInContent(editor.innerText, -1));
   });
 
   document.getElementById('generateButton').addEventListener('click', async () => {
