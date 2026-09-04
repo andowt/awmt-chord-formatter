@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chord Formatter</title>
-  <link rel="stylesheet" href="../stylesheets/styles.css">
+  <link rel="stylesheet" href="/src/styles/styles.css">
 </head>
 <body>
   <div class="toolbar">
@@ -19,17 +20,15 @@
   <div class="toolbar">
     <button id="generateButton">Generate Word Document</button>
     <button id="configBtn">Open configurations</button>
-  <div>
+    <div>
       <label for="filename">Song Name:</label>
       <input type="text" id="filename" placeholder="Enter song name...">
+    </div>
+    <label for="autoBreak">AutoBreak:</label>
+    <input type="checkbox" id="autoBreak" name="autoBreak" checked>
   </div>
-  <label for="autoBreak">AutoBreak:</label>
-  <input type="checkbox" id="autoBreak" name="autoBreak" checked></button>
-  </div>
-  <div>
-    <p id="status"></p>
-  </div>
-  <div id="editor" contenteditable="true" placeholder="Start typing..."></div>
-  <script src="windowMain.js", type="module"></script>
+  <p id="status"></p>
+  <div id="editor" contenteditable="true" aria-label="Chord sheet editor"></div>
+  <script type="module" src="/src/pages/main.js"></script>
 </body>
 </html>

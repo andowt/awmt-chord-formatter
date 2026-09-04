@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { getChords, getNormalisedChords } from '../src/chordProcessing/chordOperations.js';
+import { getChords, getNormalisedChords } from '../src/features/chordProcessing/chordOperations.js';
 
 import { fileURLToPath } from 'url';
 
