@@ -12,6 +12,14 @@ import defaultConfigurations from '../data/default-configs.json';
 import exampleText from '../data/example.txt?raw';
 import { readStoredConfigurations } from '../features/config/configuration.js';
 
+if (import.meta.env.PROD && 'serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register(`${import.meta.env.BASE_URL}sw.js`, {
+      scope: import.meta.env.BASE_URL,
+    });
+  });
+}
+
 function loadConfigurations() {
   return readStoredConfigurations(defaultConfigurations);
 }

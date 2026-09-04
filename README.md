@@ -20,6 +20,12 @@ Run `npm test`.
 
 The application is a browser-based Vite app. DOCX files are generated client-side, configuration is stored in `localStorage`, and example/configuration data is bundled as browser assets.
 
+## Offline Installation
+
+The production build is a Progressive Web App. Open the published site once while online, then use the browser's **Install** or **Add to Home Screen** option. After the first successful load, the app shell and generated assets are cached for offline use.
+
+DOCX generation works offline because it runs entirely in the browser. Configuration changes remain available through `localStorage` on the installed browser/device.
+
 ## GitHub Pages
 
 The workflow in `.github/workflows/deploy.yml` builds and deploys the app automatically whenever changes are pushed to `main`.
