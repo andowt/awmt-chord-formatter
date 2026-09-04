@@ -29,8 +29,8 @@
     <label for="tabSpaces">Tab spaces:</label>
     <input type="number" id="tabSpaces" name="tabSpaces" value="4" min="0" step="1">
   </div>
-  <p id="status"></p>
   <div id="editor" contenteditable="true" aria-label="Chord sheet editor"></div>
+  <output id="status" class="status-bar" aria-live="polite"></output>
   <dialog id="configModal" aria-labelledby="configModalTitle">
     <form method="dialog" class="config-modal-content">
       <div class="config-modal-header">
