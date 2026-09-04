@@ -2,26 +2,21 @@
   "name": "chord_formatter_v2",
   "version": "1.0.0",
   "description": "Application to format and key change chord sheets",
-  "main": "src/main.cjs",
   "type": "module",
   "scripts": {
-    "start": "electron-forge start",
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
-    "package": "electron-forge package",
-    "make": "electron-forge make"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "jest"
   },
   "author": "Andy West",
   "license": "ISC",
   "devDependencies": {
-    "@electron/fuses": "^1.8.0",
-    "fs": "^0.0.1-security",
     "jest": "^29.7.0",
-    "path": "^0.12.7",
     "vite": "^8.2.2"
   },
   "dependencies": {
-    "docx": "^8.5.0",
-    "electron-squirrel-startup": "^1.0.1"
+    "docx": "^8.5.0"
   },
   "jest": {
     "testEnvironment": "node",
