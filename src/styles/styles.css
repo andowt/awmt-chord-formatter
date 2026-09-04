@@ -21,6 +21,7 @@ body {
   flex-direction: column;
   color: var(--ink);
   background: var(--canvas);
+  font-size: 15px;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
@@ -53,21 +54,17 @@ button:focus-visible, input:focus-visible, select:focus-visible, #editor:focus-v
 }
 
 .app-title { display: flex; align-items: center; gap: 12px; max-width: 1440px; margin: auto; }
-.app-mark {
-  display: grid;
+.app-logo {
+  display: block;
   width: 36px;
   height: 36px;
-  place-items: center;
-  border-radius: 9px;
-  color: #20313d;
-  background: #f0c27b;
-  font-family: Georgia, serif;
-  font-size: 23px;
-  font-weight: 700;
+  object-fit: contain;
+  border-radius: 50%;
+  background: #1598d7;
 }
 .app-title h1, .app-title p { margin: 0; }
-.app-title h1 { font-size: 19px; }
-.app-title p { margin-top: 2px; color: #b9c9d1; font-size: 12px; }
+.app-title h1 { font-size: 22px; font-weight: 750; }
+.app-title p { margin-top: 3px; color: #b9c9d1; font-size: 14px; font-weight: 600; }
 
 .app-main { min-height: 0; flex: 1; display: flex; flex-direction: column; width: min(1440px, 100%); margin: auto; }
 .toolbar {
@@ -82,13 +79,13 @@ button:focus-visible, input:focus-visible, select:focus-visible, #editor:focus-v
 .toolbar-primary { gap: 18px; }
 .toolbar-secondary { background: var(--surface); }
 .toolbar-group { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
-.toolbar-label { margin-right: 3px; color: var(--muted); font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
-.toolbar button { font-size: 12px; }
+.toolbar-label { margin-right: 3px; color: var(--muted); font-size: 12px; font-weight: 750; letter-spacing: .08em; text-transform: uppercase; }
+.toolbar button { font-size: 13px; font-weight: 650; }
 .button-primary { border-color: var(--accent); color: #fff; background: var(--accent); font-weight: 700; }
 .button-primary:hover { border-color: var(--accent-dark); color: #fff; background: var(--accent-dark); }
 .button-secondary { border-color: #b8cdd5; color: var(--accent-dark); background: var(--accent-soft); }
 .button-quiet, .document-actions { margin-left: auto; }
-.field-inline, .toggle-field { display: inline-flex; align-items: center; gap: 7px; color: var(--muted); font-size: 12px; font-weight: 600; }
+.field-inline, .toggle-field { display: inline-flex; align-items: center; gap: 7px; color: var(--muted); font-size: 13px; font-weight: 700; }
 .field-inline input { width: 190px; }
 .field-number input { width: 58px; }
 input, select { min-height: 32px; padding: 5px 8px; border: 1px solid var(--line); border-radius: 6px; color: var(--ink); background: var(--surface); }
@@ -113,7 +110,7 @@ input, select { min-height: 32px; padding: 5px 8px; border: 1px solid var(--line
 }
 #editor:empty::before { content: "Paste or type your chord sheet here..."; color: #a2adb4; pointer-events: none; }
 
-.status-bar { display: block; flex: 0 0 auto; min-height: 30px; padding: 7px 24px; color: #8ee6a8; background: #20313d; border-top: 1px solid #314954; font-size: 12px; }
+.status-bar { display: block; flex: 0 0 auto; min-height: 30px; padding: 7px 24px; color: #8ee6a8; background: #20313d; border-top: 1px solid #314954; font-size: 13px; font-weight: 650; }
 .highlighted-chord { padding: .2em .5em; border-radius: 3px; color: #163d4a; background: #f0c27b; font-weight: bold; }
 
 #configModal { width: min(720px, calc(100vw - 32px)); max-height: calc(100vh - 32px); padding: 0; border: 1px solid var(--line); border-radius: 10px; box-shadow: 0 20px 60px rgb(23 33 43 / 22%); }
@@ -121,9 +118,9 @@ input, select { min-height: 32px; padding: 5px 8px; border: 1px solid var(--line
 .config-modal-content { padding: 22px; overflow-y: auto; }
 .config-modal-header, .config-modal-actions { display: flex; align-items: center; gap: 10px; }
 .config-modal-header { justify-content: space-between; margin-bottom: 16px; }
-.config-modal-header h2 { margin: 0; font-size: 20px; }
+.config-modal-header h2 { margin: 0; font-size: 22px; font-weight: 750; }
 .config-modal-actions { justify-content: flex-end; margin-top: 16px; }
-#config-status { display: block; min-height: 1.2em; margin: 12px 0 0; color: var(--muted); font-size: 12px; }
+#config-status { display: block; min-height: 1.2em; margin: 12px 0 0; color: var(--muted); font-size: 13px; font-weight: 600; }
 .visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 .config-item { display: grid; grid-template-columns: 110px minmax(0, 1fr) 70px minmax(0, 1fr); gap: 8px; align-items: center; padding: 12px 0; border-bottom: 1px solid #edf0f2; }
 .config-item br { display: none; }
