@@ -7,29 +7,55 @@
   <link rel="stylesheet" href="/src/styles/styles.css">
 </head>
 <body>
-  <div class="toolbar">
-    <button id="markBtn">Mark Chords</button>
-    <button id="unMarkBtn">UnMark Chords</button>
-    <button id="nestBtn">Nest Chords</button>
-    <button id="unNestBtn">UnNest Chords</button>
-    <button id="rmEmptyBtn">Remove Empty Lines</button>
-    <button id="transUpBtn">Transpose Up</button>
-    <button id="transDownBtn">Transpose Down</button>
-    <button id="loadExampleBtn">Load Example</button>
-  </div>
-  <div class="toolbar">
-    <button id="generateButton">Generate Word Document</button>
-    <button id="configBtn">Open configurations</button>
-    <div>
-      <label for="filename">Song Name:</label>
-      <input type="text" id="filename" placeholder="Enter song name...">
+  <header class="app-header">
+    <div class="app-title">
+      <span class="app-mark" aria-hidden="true">C</span>
+      <div>
+        <h1>Chord Formatter</h1>
+        <p>Shape, transpose, and export your chord sheets</p>
+      </div>
     </div>
-    <label for="autoBreak">AutoBreak:</label>
-    <input type="checkbox" id="autoBreak" name="autoBreak" checked>
-    <label for="tabSpaces">Tab spaces:</label>
-    <input type="number" id="tabSpaces" name="tabSpaces" value="4" min="0" step="1">
-  </div>
-  <div id="editor" contenteditable="true" aria-label="Chord sheet editor"></div>
+  </header>
+  <main class="app-main">
+    <div class="toolbar toolbar-primary" aria-label="Chord editing tools">
+      <div class="toolbar-group">
+        <span class="toolbar-label">Format</span>
+        <button id="markBtn">Mark Chords</button>
+        <button id="unMarkBtn">Unmark</button>
+        <button id="nestBtn">Nest Chords</button>
+        <button id="unNestBtn">Unnest</button>
+        <button id="rmEmptyBtn">Remove Empty Lines</button>
+      </div>
+      <div class="toolbar-group">
+        <span class="toolbar-label">Key</span>
+        <button id="transUpBtn">Transpose Up</button>
+        <button id="transDownBtn">Transpose Down</button>
+      </div>
+      <button id="loadExampleBtn" class="button-quiet">Load Example</button>
+    </div>
+    <div class="toolbar toolbar-secondary" aria-label="Document options">
+      <div class="toolbar-group document-actions">
+        <button id="generateButton" class="button-primary">Generate Word ZIP</button>
+        <button id="configBtn" class="button-secondary">Configurations</button>
+      </div>
+      <label class="field-inline" for="filename">
+        <span>Song name</span>
+        <input type="text" id="filename" placeholder="Enter song name...">
+      </label>
+      <label class="toggle-field" for="autoBreak">
+        <input type="checkbox" id="autoBreak" name="autoBreak" checked>
+        <span>Auto-break</span>
+      </label>
+      <label class="field-inline field-number" for="tabSpaces">
+        <span>Tab spaces</span>
+        <input type="number" id="tabSpaces" name="tabSpaces" value="4" min="0" step="1">
+      </label>
+    </div>
+    <div class="editor-wrap">
+      <div class="editor-hint">Chord sheet</div>
+      <div id="editor" contenteditable="true" aria-label="Chord sheet editor"></div>
+    </div>
+  </main>
   <output id="status" class="status-bar" aria-live="polite"></output>
   <dialog id="configModal" aria-labelledby="configModalTitle">
     <form method="dialog" class="config-modal-content">
