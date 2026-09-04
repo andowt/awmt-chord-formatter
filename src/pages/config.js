@@ -1,5 +1,5 @@
-import configurationsFile from './config.json';
-import defaultConfigurationsFile from './default_configs.json';
+import configurationsFile from '../data/config.json';
+import defaultConfigurationsFile from '../data/default-configs.json';
 
 document.addEventListener('DOMContentLoaded', () => {
     let configurations = [];

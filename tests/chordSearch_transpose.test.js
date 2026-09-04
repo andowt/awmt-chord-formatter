@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { transposeChords } from '../src/chordProcessing/chordOperations.js';
+import { transposeChords } from '../src/features/chordProcessing/chordOperations.js';
 import { fileURLToPath } from 'url';
 
 // Get the directory name of the current module

@@ -6,20 +6,18 @@ import {
   transposeInContent,
   removeBlankLinesInContent,
   autoBreakContent
-} from '../chordProcessing/chordContentProcessor.js';
-import { downloadDocx, generateDocx } from '../docxGenerator/docxGen.js';
+} from '../features/chordProcessing/chordContentProcessor.js';
+import { downloadDocx, generateDocx } from '../features/docx/docxGen.js';
+import defaultConfigurations from '../data/default-configs.json';
+import exampleText from '../data/example.txt?raw';
 
 const configStorageKey = 'chord-formatter-configurations';
-const defaultConfigurationsUrl = new URL('../windowConfig/default_configs.json', import.meta.url);
-const exampleTextUrl = new URL('../exampleLoader/example.txt', import.meta.url);
 
 async function loadConfigurations() {
   const savedConfigurations = localStorage.getItem(configStorageKey);
   if (savedConfigurations) return JSON.parse(savedConfigurations);
 
-  const response = await fetch(defaultConfigurationsUrl);
-  if (!response.ok) throw new Error(`Failed to load configurations: ${response.status}`);
-  return response.json();
+  return defaultConfigurations;
 }
 
 function showStatus(message) {
@@ -31,9 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.getElementById('loadExampleBtn').addEventListener('click', async () => {
     try {
-      const response = await fetch(exampleTextUrl);
-      if (!response.ok) throw new Error(`Failed to load example: ${response.status}`);
-      editor.innerText = await response.text();
+      editor.innerText = exampleText;
     } catch (error) {
       showStatus('Failed to load example text.');
       console.error(error);
