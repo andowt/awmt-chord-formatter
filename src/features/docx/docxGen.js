@@ -8,6 +8,7 @@ import {
   Packer,
   TextRun,
 } from 'docx';
+import JSZip from 'jszip';
 
 function preserveLeadingSpaces(line) {
   const leadingSpaces = /^ +/.exec(line);
@@ -73,10 +74,17 @@ export async function generateDocx({ fontSize, fontWeight, configName, a3, conte
   return Packer.toBlob(document);
 }
 
-export function downloadDocx(blob, fileName, configName) {
+export async function downloadDocxZip(documents, fileName) {
+  const zip = new JSZip();
+  documents.forEach(({ blob, configName }) => {
+    zip.file(`${fileName.replace(/\s+/g, '_')}_${configName}.docx`, blob);
+  });
+
+  const zipBlob = await zip.generateAsync({ type: 'blob' });
   const link = document.createElement('a');
-  link.href = URL.createObjectURL(blob);
-  link.download = `${fileName.replace(/\s+/g, '_')}_${configName}.docx`;
+  const objectUrl = URL.createObjectURL(zipBlob);
+  link.href = objectUrl;
+  link.download = `${fileName.replace(/\s+/g, '_')}.zip`;
   link.click();
-  URL.revokeObjectURL(link.href);
+  URL.revokeObjectURL(objectUrl);
 }
