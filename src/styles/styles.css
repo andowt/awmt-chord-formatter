@@ -111,7 +111,10 @@ input, select { min-height: 32px; padding: 5px 8px; border: 1px solid var(--line
 }
 #editor:empty::before { content: "Paste or type your chord sheet here..."; color: #a2adb4; pointer-events: none; }
 
-.status-bar { display: block; flex: 0 0 auto; min-height: 30px; padding: 7px 24px; color: #8ee6a8; background: #20313d; border-top: 1px solid #314954; font-size: 13px; font-weight: 650; }
+.status-bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex: 0 0 auto; min-height: 30px; padding: 7px 24px; color: #8ee6a8; background: #20313d; border-top: 1px solid #314954; font-size: 13px; font-weight: 650; }
+.status-bar #status { min-width: 0; }
+.status-bar #installButton { flex: 0 0 auto; min-height: 28px; padding: 4px 10px; border-color: #8ee6a8; color: #20313d; background: #8ee6a8; font-size: 12px; font-weight: 750; }
+.status-bar #installButton:hover { border-color: #b1f2c2; background: #b1f2c2; }
 .highlighted-chord { padding: .2em .5em; border-radius: 3px; color: #163d4a; background: #f0c27b; font-weight: bold; }
 
 #configModal { width: min(720px, calc(100vw - 32px)); max-height: calc(100vh - 32px); padding: 0; border: 1px solid var(--line); border-radius: 10px; box-shadow: 0 20px 60px rgb(23 33 43 / 22%); }
